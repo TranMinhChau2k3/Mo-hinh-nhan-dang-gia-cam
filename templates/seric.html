@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Arial', sans-serif;
+        background: linear-gradient(rgba(255, 245, 230, 0.85), rgba(255, 245, 230, 0.85)), url('https://www.transparenttextures.com/patterns/cherry-blossoms.png');
+        background-size: cover;
+        background-attachment: fixed;
+        color: #2F2F2F;
+        line-height: 1.6;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        overflow-x: hidden;
+    }
+
+    header {
+        background-color: #6B4E31;
+        padding: 1rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+    }
+
+    main {
+        padding-top: 80px; /* tránh bị header cố định che khuất */
+    }
+
+    nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    .logo {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        color: white;
+        font-size: 1.6em;
+        font-weight: bold;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .nav-links {
+        list-style: none;
+        display: flex;
+        margin: 0;
+        padding: 0;
+    }
+
+    .nav-links li {
+        margin-left: 25px;
+    }
+
+    .nav-links li a {
+        color: white;
+        text-decoration: none;
+        font-size: 1.2em;
+        font-weight: 600;
+        padding: 8px 12px;
+        border-radius: 6px;
+        transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+        display: inline-block;
+    }
+
+    .nav-links li a:hover,
+    .nav-links li a:focus {
+        color: #F5E050;
+        background-color: rgba(255, 245, 80, 0.15);
+        transform: translateY(-3px) scale(1.1);
+        box-shadow: 0 4px 8px rgba(245, 224, 80, 0.5);
+        outline: none;
+        cursor: pointer;
+    }
+
+    .burger {
+        display: none;
+        cursor: pointer;
+    }
+
+    .burger span {
+        display: block;
+        width: 25px;
+        height: 3px;
+        background: white;
+        margin: 5px 0;
+        transition: all 0.3s;
+    }
+
+    .hero {
+        text-align: center;
+        padding: 100px 20px 60px;
+        background-color: rgba(255, 255, 255, 0.9);
+        border-radius: 15px;
+        margin: 30px auto 30px;
+        max-width: 900px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        animation: fadeIn 1s ease-in;
+    }
+
+    .hero h1 {
+        color: #6B4E31;
+        font-size: 2.8em;
+        margin-bottom: 15px;
+        font-weight: 600;
+    }
+
+    .hero p {
+        color: #4A4035;
+        font-size: 1.3em;
+    }
+
+    .upload-section {
+        text-align: center;
+        padding: 40px;
+        background-color: rgba(255, 255, 255, 0.95);
+        border-radius: 15px;
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        max-width: 650px;
+        margin: 30px auto;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .upload-section:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .upload-section h2 {
+        color: #6B4E31;
+        font-size: 2em;
+        margin-bottom: 25px;
+        animation: slideIn 1s ease-out;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    input[type="file"] {
+        margin-bottom: 20px;
+        padding: 10px;
+        border: 1px solid #6B4E31;
+        border-radius: 5px;
+        background-color: #FFF;
+        transition: border-color 0.3s;
+    }
+
+    input[type="file"]:focus {
+        border-color: #F5E050;
+        outline: none;
+    }
+
+    button {
+        background-color: #6B4E31;
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1.1em;
+        transition: background-color 0.3s, transform 0.3s;
+    }
+
+    button:hover {
+        background-color: #8B5A2B;
+        transform: scale(1.05);
+    }
+
+    .result {
+        margin-top: 20px;
+        color: #333;
+        font-size: 1.1em;
+        opacity: 0;
+        animation: fadeInResult 1s ease-in forwards;
+    }
+
+    #ve-chung-toi {
+        background: rgba(255, 255, 255, 0.95);
+        padding: 50px 30px;
+        margin: 30px auto;
+        border-radius: 15px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        max-width: 900px;
+        animation: fadeIn 1s ease-in;
+        text-align: center;
+    }
+
+    #ve-chung-toi h2 {
+        color: #6B4E31;
+        font-size: 2.4em;
+        margin-bottom: 20px;
+    }
+
+    .nav-links li a:hover {
+        color: #F5E050;
+        transform: scale(1.05) translateY(-2px);
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    #ve-chung-toi p {
+        font-size: 1.2em;
+        color: #444;
+        line-height: 1.8;
+    }
+
+    footer {
+        background-color: #333;
+        color: white;
+        text-align: center;
+        padding: 20px 0;
+        margin-top: auto;
+        width: 100%;
+        font-size: 1em;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    footer p {
+        margin: 5px 0;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .nav-links {
+            display: none;
+            flex-direction: column;
+            position: absolute;
+            top: 60px;
+            right: 20px;
+            background-color: #6B4E31;
+            padding: 10px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        .nav-links.active {
+            display: flex;
+        }
+        .nav-links li {
+            margin: 10px 0;
+        }
+        .burger {
+            display: block;
+        }
+        .burger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        .burger.active span:nth-child(2) {
+            opacity: 0;
+        }
+        .burger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+        .hero h1 {
+            font-size: 2.2em;
+        }
+        .hero p {
+            font-size: 1.1em;
+        }
+        .upload-section {
+            width: 85%;
+            padding: 25px;
+        }
+    }
+
+    /* Animation */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateY(20px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    @keyframes fadeInResult {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+    /* Camera button styles */
+    .camera-button {
+        cursor: pointer;
+        background-color: #6B4E31;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        padding: 10px 14px;
+        margin: 0 6px;
+        font-size: 1.4em;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+.camera-button:hover,
+.camera-button:focus {
+    background-color: #8B5A2B;
+    outline: none;
+    transform: scale(1.15);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+}
+h2 {
+  text-align: center;
+}
+h2 {
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin: 20px auto;
+}
+
+</style>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Tải lên hình ảnh gia cầm để nhận dạng bằng mô hình học sâu.">
+    <meta name="author" content="Grok">
+    <title>Nhận Dạng Gia Cầm</title>
+    <link rel="icon" href="../imge/logo.jpg" type="image/x-icon">
+</head>
+
+
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <span class="logo-text" style="color: white; font-size: 1.6em; font-weight: bold;">🌸 Nhận Dạng Gia Cầm</span>
+            </div>
+
+            <ul class="nav-links">
+                <li><a href="#trang-chu">Trang Chủ</a></li>
+                <li><a href="#ve-chung-toi">Về Chúng Tôi</a></li>
+                <li><a href="#lien-he">Liên Hệ</a></li>
+            </ul>
+            <div class="burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- THÊM id="trang-chu" vào đây -->
+        <section class="hero" id="trang-chu">
+            <h1>Nhận Dạng Gia Cầm Bằng Hình Ảnh</h1>
+            <p>Phát hiện chính xác các loại gia cầm với công nghệ tiên tiến.</p>
+        </section>
+
+        <!-- PHẦN "VỀ CHÚNG TÔI" THÊM MỚI -->
+        <section id="ve-chung-toi" style="text-align: center; padding: 40px; background-color: rgba(255,255,255,0.95); margin: 20px auto; max-width: 800px; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+            <h2>Về Chúng Tôi</h2>
+            <p>Chúng tôi là nhóm phát triển công nghệ nhận dạng gia cầm bằng trí tuệ nhân tạo, với mục tiêu hỗ trợ nông dân Việt Nam nâng cao hiệu suất và quản lý chăn nuôi thông minh.</p>
+        </section>
+
+        <section class="upload-section">
+            <h2>Tải Lên Hình Ảnh</h2>
+            <form id="uploadForm" method="POST" action="/predict" enctype="multipart/form-data">
+    <input type="file" name="image" accept="image/*" required>
+    <button type="submit">Nhận Dạng Ngay</button>
+        </form>
+
+            <div id="result" class="result"></div>
+            <div id="preview" style="margin-top: 20px;"></div>
+            <p>Kích thước tối đa 100MB, hỗ trợ: JPG, PNG, GIF.</p>
+        </section>
+
+        <hr style="margin:40px 0;">
+
+        <h2>Hoặc Chụp Ảnh Từ Camera</h2>
+        <div style="text-align:center;">
+            <video id="video" width="320" height="240" autoplay style="border-radius:10px; box-shadow:0 0 15px rgba(0,0,0,0.2);"></video>
+            <br/>
+            <button id="startCameraBtn" type="button" style="margin:10px 5px; background:#6B4E31; color:#fff; padding:10px 20px; border:none; border-radius:5px; cursor:pointer;">Bật Camera</button>
+            <button id="captureBtn" type="button" style="margin:10px 5px; background:#8B5A2B; color:#fff; padding:10px 20px; border:none; border-radius:5px; cursor:pointer;" disabled>Chụp Ảnh</button>
+            <button id="sendCaptureBtn" type="button" style="margin:10px 5px; background:#6B4E31; color:#fff; padding:10px 20px; border:none; border-radius:5px; cursor:pointer;" disabled>Gửi Dự Đoán</button>
+            <br/>
+            <canvas id="canvas" width="320" height="240" style="display:none; border-radius:10px; box-shadow:0 0 15px rgba(0,0,0,0.2); margin-top: 20px;"></canvas>
+            <div id="cameraResult" style="margin-top: 20px; color:#333; font-size:1.1em;"></div>
+        </div>
+
+    </main>
+
+    <!-- THÊM id="lien-he" vào đây -->
+    <footer id="lien-he">
+        <p>© 2025 Nhận Dạng Gia Cầm. Đã đăng ký bản quyền.</p>
+        <p>Bản quyền này của : Trần Minh Châu - Nguyễn Quốc Huy </p>
+        <p>Ngày và giờ hiện tại: <span id="time"></span></p>
+    </footer>
+</body>
+
+</html>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    // ==== Phần 1: Tải ảnh từ máy ====
+    const uploadForm = document.getElementById('uploadForm');
+    const resultDiv = document.getElementById('result');
+    const previewDiv = document.getElementById('preview');
+
+    uploadForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        resultDiv.textContent = '⏳ Đang xử lý...';
+        previewDiv.innerHTML = '';
+
+        const formData = new FormData(uploadForm);
+
+        try {
+            const response = await fetch('/predict', {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                resultDiv.textContent = `❌ Lỗi: ${data.error || 'Không xác định'}`;
+                return;
+            }
+
+            resultDiv.textContent = `✅ Kết quả: ${data.prediction}`;
+            previewDiv.innerHTML = `
+                <img src="${data.image_url}" alt="Ảnh đã tải" 
+                     style="max-width:300px; border-radius:10px; box-shadow:0 0 15px rgba(0,0,0,0.2);"/>
+            `;
+        } catch (err) {
+            console.error(err);
+            resultDiv.textContent = '❌ Lỗi kết nối server. Vui lòng thử lại.';
+        }
+    });
+
+    // ==== Phần 2: Dùng Camera ====
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const cameraResult = document.getElementById('cameraResult');
+    const startCameraBtn = document.getElementById('startCameraBtn');
+    const captureBtn = document.getElementById('captureBtn');
+    const sendCaptureBtn = document.getElementById('sendCaptureBtn');
+
+    let stream = null;
+
+    startCameraBtn.addEventListener('click', async () => {
+        try {
+            stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            video.srcObject = stream;
+            video.play();
+
+            startCameraBtn.disabled = true;
+            captureBtn.disabled = false;
+            cameraResult.textContent = '';
+        } catch (err) {
+            alert('Không thể truy cập camera: ' + err.message);
+        }
+    });
+
+    captureBtn.addEventListener('click', () => {
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        canvas.style.display = 'block';
+
+        sendCaptureBtn.disabled = false;
+        cameraResult.textContent = '📸 Đã chụp ảnh. Bấm "Gửi dự đoán" để tiếp tục.';
+    });
+
+    sendCaptureBtn.addEventListener('click', () => {
+        cameraResult.textContent = '⏳ Đang gửi ảnh...';
+
+        canvas.toBlob(async (blob) => {
+            const formData = new FormData();
+            formData.append('image', blob, 'capture.png');
+
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    cameraResult.textContent = `❌ Lỗi: ${data.error || 'Không xác định'}`;
+                    return;
+                }
+
+                cameraResult.textContent = `✅ Kết quả: ${data.prediction}`;
+            } catch (err) {
+                console.error(err);
+                cameraResult.textContent = '❌ Gửi dữ liệu thất bại. Vui lòng thử lại.';
+            }
+        }, 'image/png');
+    });
+});
+</script>
+
